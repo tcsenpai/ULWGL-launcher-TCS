@@ -62,6 +62,12 @@ _NOTE: the current release has been tested with 0.1 RC3 release in mind and thus
 
 ### ⚙ Prerequisites
 
+- Any Proton version; GE-Proton is highly recommended
+
+#### Getting Proton
+
+You are advised to either use tools like ProtonUp (and its -QT flavor) or to download the latest release from https://github.com/GloriousEggroll/proton-ge-custom/releases and extract it in a folder that you will use as PROTONPATH
+
 - Python
 
 - Not needed of my machine but: ensure to read launcher/Original_README.md to understand ULWGL Launcher prerequisites
@@ -86,7 +92,7 @@ It is important to understand how UWINE works. The 'uwine' executable has to fil
 
 - PROTONPATH
 
-  - string pointing to your custom Proton installation or to the Steam one (see above)
+  - string pointing to your custom Proton installation (see Prerequisites)
   - defaults to [script_dir]/protons
 
 - WINEPREFIX
@@ -140,9 +146,9 @@ While adding custom environmental variables both in your shell or in the env fil
 By editing the `env` file you want to use, you can add:
 
 ```json
-  CUSTOMVARS="{
-    "YOUR_VAR":"YOUR_VALUE"
-  }"
+  CUSTOMVARS='{
+    "YOUR_VAR": "YOUR_VALUE"
+  }'
 ```
 
 The above syntax allows UWINE to present you in a nicer and more organized way your final command.
