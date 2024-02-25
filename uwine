@@ -32,7 +32,7 @@ ids = {}
 game_id = 0
 filepath = ""
 
-envfile = ".env"
+envfile = UWINEDIR + "/.env"
 
 # NOTE Parsing the arguments
 parser = argparse.ArgumentParser(
