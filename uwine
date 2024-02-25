@@ -71,7 +71,11 @@ print(args.ulwlgdir)
 # Loading the .env file
 if args.envfile:
     envfile = args.envfile
-print("[*] Loading the .env file: " + envfile)
+print("[*] Loading the env file: " + envfile)
+# Which is mandatory
+if not os.path.isfile(envfile):
+    print("[FATAL] env file not found: " + envfile + "\nTry to copy env.example to .env in your UWINE installation directory.")
+    exit(1)
 dotenv.load_dotenv(dotenv_path=envfile)
 
 # Ensuring we support either none or some customvars
