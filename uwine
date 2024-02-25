@@ -1,0 +1,126 @@
+#!/bin/python
+
+import os
+import argparse
+from tabulate import tabulate
+import dotenv
+import json
+
+import libs.ids_loader as ids_loader
+import libs.gameid_loader as gameid_loader
+import libs.protonpath_loader as protonpath_loader
+import libs.wineprefix_loader as wineprefix_loader
+import libs.filepath_loader as filepath_loader
+import libs.ulwgl_loader as ulwgl_loader
+import libs.customvars_loader as customvars_loader
+import libs.predirectives_loader as predirectives_loader
+import libs.postdirectives_loader as postdirectives_loader
+import libs.ulwlg_runner as ulwlg_runner
+
+# SECTION Constants
+LAUNCHDIR = os.getcwd()
+print("[*] Launching in " + LAUNCHDIR)
+UWINEDIR = os.path.dirname(os.path.realpath(__file__))
+print("[*] UWINE is installed in " + UWINEDIR)
+
+# SECTION Default values
+ulwgl_dir = UWINEDIR + "/launcher"
+proton_path = UWINEDIR + "/protons/current"
+wine_prefix = UWINEDIR + "/PREFIX"
+ids_json_path = UWINEDIR + "/ids.json"
+ids = {}
+game_id = 0
+filepath = ""
+
+envfile = ".env"
+
+# NOTE Parsing the arguments
+parser = argparse.ArgumentParser(
+    prog="uwine",
+    description="ULWGL Launcher Wrapper for human beings",
+    epilog="https://github.com/thecookingsenpai/UWINE",
+)
+parser.add_argument(
+    "filepath", help="Path to the file to be launched", type=str, nargs="?", default=None
+)
+parser.add_argument(
+    "-l", "--load", help="Load a specific env file", type=str, dest="envfile"
+)
+parser.add_argument(
+    "-g", "--game-id", dest="gameid", help="Game ID to be used", type=int
+)
+parser.add_argument(
+    "-p", "--proton-path", dest="protonpath", help="Path to the Proton installation"
+)
+parser.add_argument("-i", "--ids-json", dest="ids", help="Path to the ids.json file")
+parser.add_argument(
+    "-w", "--wine-prefix", dest="wineprefix", help="Path to the Wine prefix"
+)
+parser.add_argument(
+    "-u", "--ulwgl", dest="ulwlgdir", help="Path to the ULWGL installation"
+)
+parser.add_argument(
+    "-a", "--additionalargs", dest="additionalargs", help="Additional arguments to be passed to the software (at the end, as a string)", type=str, default=""
+)
+
+parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1")
+
+args = parser.parse_args()
+print(args.ulwlgdir)
+
+# Loading the .env file
+if args.envfile:
+    envfile = args.envfile
+print("[*] Loading the .env file: " + envfile)
+dotenv.load_dotenv(dotenv_path=envfile)
+
+# Ensuring we support either none or some customvars
+if os.environ["CUSTOMVARS"]:
+    print("[INFO] [CUSTOMVARS] " + os.environ["CUSTOMVARS"])
+    env_defined_customvars = os.environ["CUSTOMVARS"]
+else:
+    env_defined_customvars = {}
+
+
+if __name__ == "__main__":
+    # SECTION Loading methods
+    ulwgl_dir = ulwgl_loader.set_ulwgldir(args.ulwlgdir, UWINEDIR)
+    ids, ids_json_path = ids_loader.load_ids(args.ids, ids, ids_json_path)
+    loaded_customvars = customvars_loader.set_customvars(env_defined_customvars, {})
+    os.environ["GAMEID"] = str(gameid_loader.load_gameid(args.gameid, game_id, ids))
+    os.environ["PROTONPATH"] = protonpath_loader.set_protonpath(
+        args.protonpath, proton_path, UWINEDIR
+    )
+    os.environ["WINEPREFIX"] = wineprefix_loader.set_wineprefix(
+        args.wineprefix, wine_prefix
+    )
+    filepath = filepath_loader.set_filepath(args.filepath, LAUNCHDIR)
+    # Directives support
+    predirectives = predirectives_loader.set_predirectives("") # Future support for postdirectives in cli
+    postdirectives = postdirectives_loader.set_postdirectives(args.additionalargs)
+    # SECTION Launching the game
+    print("\n[*] Launching the game...")
+
+    # ANCHOR Recap
+    # Lets make a nice table to show the user what we are going to do
+
+    print(
+        tabulate(
+            [
+                ["ULWGLDIR", ulwgl_dir],
+                ["WINEPREFIX", os.environ["WINEPREFIX"]],
+                ["PROTONPATH", os.environ["PROTONPATH"]],
+                ["IDS_JSON", ids_json_path],
+                ["GAMEID", os.environ["GAMEID"]],
+                ["PREDIRECTIVES", predirectives],
+                ["FILEPATH", filepath],
+                ["POSTDIRECTIVES", postdirectives],
+                ["CUSTOMVARS", loaded_customvars]
+            ],
+            headers=["Variable", "Value"],
+            tablefmt="fancy_grid",
+        )
+    )
+
+    # Launching with ulwlg_runner
+    ulwlg_runner.ulwlg_run(filepath, ulwgl_dir, os.environ["PROTONPATH"], os.environ["WINEPREFIX"], os.environ["GAMEID"])

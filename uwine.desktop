@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=UWine
+Comment=Launch with UWine!
+Icon=q4wine
+Exec=uwine
+Terminal=true
+Actions=
+Categories=Game;

@@ -1,1 +1,7 @@
+launcher
+.git
+.env
+__pycache__
+test_launcher
 var
+_not_needed_

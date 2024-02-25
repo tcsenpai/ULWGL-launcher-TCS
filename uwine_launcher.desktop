@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=UWine Launcher
+Comment=Launch .uwine files (and compatible ones)
+Icon=winetricks
+Exec=uwine -l 
+Terminal=true
+Actions=
+Categories=Game;
