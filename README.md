@@ -6,7 +6,7 @@ Play and run Windows software with Proton without Steam in a (maybe a couple of)
 
 ![Hello world](https://raw.githubusercontent.com/tcsenpai/UWINE/main/screenshot.png)
 
-## What is UWINE
+## What is ULWGL-LAUNCHER-TCS ( ⾣ UWINE )
 
 UWINE is a wrapper around ULWGL designed to help as many users as possible to run WIndows software (included but not limited to games) using Proton (and its flavors like ProtonGE) without Steam client needed.
 
@@ -24,23 +24,29 @@ This is just an humble wrapper designed for the following reason:
 
 - Many others are non tech-savy
 
+## Enormous Disclaimer (IMPORTANT)
+
+- My only goal is to provide the same level of comfort I have to others
+
+- ALL The work done by the OpenWineComponents deserves a statue or more than one
+
+- Being an experimental version of ULWGL-Launcher this can be prone to errors
+
 ## ⭐ Features
 
-- Few dependencies and great flexibility thanks to environmental variables
+- Uses libs/ulwgl_runner.py instead of the provided ulwgl-run for a cleaner approach
 
-- Slightly modified ULWGL_Launcher to have a cleaner start
+- Can run programs as simply as "uwine program.exe" (or "uwine winecfg" for internal tools)
 
-- Can run programs as simply as "uwine program.exe" or "uwine winecfg" for internal tools
-
-- Can be used to "Open with..."
-
-- The Launcher provided can be used to "Open with..." too
-
-- Is fully customizable through both a human readable CLI interface and a practical format for `env` files
+- Fully customizable through both a human readable CLI interface and a practical format for `env` files
 
 - Can execute _launchers_ by using the above `env` files mechanism with "uwine -l launcher_of_game"
 
 - Can be configured through both the `env` file and the CLI interface together (with the CLI interface overriding the `env` file)
+
+- Can be used to "Open with..."
+
+- The Launcher provided can be used to "Open with..." too
 
 - Is modular and so is readable
 
@@ -52,25 +58,23 @@ This is just an humble wrapper designed for the following reason:
 
 ## Install
 
+_NOTE: the current release has been tested with 0.1 RC3 release in mind and thus that's the version included in laucher/_
+
 ### ⚙ Prerequisites
 
-- Download the last ULWGL Launcher binary release
+- Python
 
-  - _NOTE: this software has been tested with 0.1 RC3 release in mind. You may want to download that version if you encounter problems with different versions._
-
-- Extract it somewhere and ensure that it contains the executables (ULWGL specifically)
-
-  - NOTE: ulwgl-run is not needed, as the script uses its own runner
-
-  - Not needed of my machine but: ensure to read the README.md to understand ULWGL Launcher prerequisites
+- Not needed of my machine but: ensure to read launcher/Original_README.md to understand ULWGL Launcher prerequisites
 
 ### ⏬ Get UWINE
 
 #### ⚙ Download and Configuration
 
-- `git clone https://github.com/thecookingsenpai/UWINE`
+- `git clone https://github.com/tcsenpai/ULWGL-launcher-TCS`
 
-- `cd UWINE`
+- `cd ULWGL-launcher-TCS`
+
+- `pip install -r requirements.txt`
 
 - Now take a moment to have a look at the .env file. It contains some useful tips. You can add custom paths to it, for example, Steam usually install its instances in subfolders of `$HOME/.steam/steam/compatibilitytools.d`
 
@@ -92,7 +96,7 @@ It is important to understand how UWINE works. The 'uwine' executable has to fil
 
 - GAMEID
 
-  - integer representing the GameID in the ULWLG Database
+  - integer representing the GameID in the ULWGL Database
   - defaults to 0 which should work for the majority of the apps
 
 - IDS
@@ -101,10 +105,10 @@ It is important to understand how UWINE works. The 'uwine' executable has to fil
   - defaults to [script_dir]/ids.json
   - if it doesn't exist, the mapping will be empty
 
-- ULWLGDIR
+- ULWGLDIR
 
-  - string pointing to your ULWLGDIR installation
-  - defaults to [script_dir]/launcher which is perfectly fine if extract ULWLG_Launcher there (not in a subfoldr)
+  - string pointing to your ULWGLDIR installation
+  - defaults to [script_dir]/launcher which is perfectly fine if extract ULWGL_Launcher there (not in a subfoldr)
 
 - FILEPATH
 
@@ -174,7 +178,7 @@ This command will try to load the env file specified.
 This command will show you the following:
 
 ```bash
-usage: uwine [-h] [-l ENVFILE] [-g GAMEID] [-p PROTONPATH] [-i IDS] [-w WINEPREFIX] [-u ULWLGDIR] [-a ADDITIONALARGS] [-v] [filepath]
+usage: uwine [-h] [-l ENVFILE] [-g GAMEID] [-p PROTONPATH] [-i IDS] [-w WINEPREFIX] [-u ULWGLDIR] [-a ADDITIONALARGS] [-v] [filepath]
 
 ULWGL Launcher Wrapper for human beings
 
@@ -193,7 +197,7 @@ options:
                         Path to the ids.json file
   -w WINEPREFIX, --wine-prefix WINEPREFIX
                         Path to the Wine prefix
-  -u ULWLGDIR, --ulwgl ULWLGDIR
+  -u ULWGLDIR, --ulwgl ULWGLDIR
                         Path to the ULWGL installation
   -a ADDITIONALARGS, --additionalargs ADDITIONALARGS
                         Additional arguments to be passed to the software (as a string)
@@ -227,7 +231,7 @@ Multiple arguments can be chained together in the string such as:
 
 `uwine game.exe -a "-dx11 --skip-launcher"`
 
-In following updates this feature will be also available in the `env` file.
+You can also set the additional arguments from the env.example file as POSTDIRECTIVES (see above for explanations).
 
 ### Optional: the ids.json file
 
@@ -241,11 +245,13 @@ At the moment the `ids.json` contains just an example of how it works.
 
 The syntax is simple as the above example. Baldur's Gate 3 has been included as an example. Launching UWINE with:
 
-`uwine game.exe bg3`
+`uwine game.exe -g bg3`
 
 Will instruct UWINE to look for "bg3" in the ids.json file. If not found, it will default to `0`. You can also do:
 
-`uwine game.exe 12345`
+`uwine game.exe -g 12345`
+
+You can also use the .env file as per the env.example.
 
 Where 12345 is a custom game id that you can either invent (but why) or look up on the ULWGL database (https://ulwgl.openwinecomponents.org/).
 
@@ -280,6 +286,22 @@ If this does not work, you can simply "Open with..." and add a custom command ca
 An All-in-One package is on the way and contains the official ULWGL release tested with uwine and uwine installed in it.
 
 Is not as funny but it should be even more straightforward.
+
+## Updates
+
+I will try to keep launcher/ in line with the latest ULWGL_Launcher repository version.
+
+If for any reason I am unable to do so or you want to do it manually, you can simply (in this directory):
+
+``` bash
+# Backup the current launcher
+mv launcher launcher_bak
+# Clone the latest version of ULWGL_Launcher
+git clone https://github.com/Open-Wine-Components/ULWGL-launcher
+# Set it as the default launcher
+mv ULWGL-Launcher launcher
+```
+Some of the files won't be used but you can safely ignore them (it is just a little bit messier).
 
 ## Issues, bugs, dragons
 
