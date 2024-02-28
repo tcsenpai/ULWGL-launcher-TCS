@@ -1,14 +1,14 @@
-# ULWGL-LAUNCHER-TCS ( ⾣ UWINE )
+# ⾣ UWINE
 
-The final wrapper for ULWGL (and its launcher) has come to town.
+The final wrapper for Proton (thanks to ULWGL) and Wine has come to town.
 
-Play and run Windows software with Proton without Steam in a (maybe a couple of) click.
+Play and run Windows software on Linux seamlessly with either Proton or Wine (and without Steam needed)!
 
 ![Hello world](https://raw.githubusercontent.com/tcsenpai/UWINE/main/screenshot.png)
 
-## What is ULWGL-LAUNCHER-TCS ( ⾣ UWINE )
+## What is ⾣ UWINE
 
-UWINE is a wrapper around ULWGL designed to help as many users as possible to run WIndows software (included but not limited to games) using Proton (and its flavors like ProtonGE) without Steam client needed.
+UWINE is a launcher for Windows programs on Linux designed to help as many users as possible to run WIndows software (included but not limited to games) using Proton (and its flavors like ProtonGE) or Wine without Steam client needed and with a minimal maintainance and tinkering needed.
 
 ## Credits and License
 
@@ -16,7 +16,9 @@ This software is distributed under the MIT license.
 
 The original ULWGL-Launcher repository and its creators (https://github.com/Open-Wine-Components/ULWGL-launcher) are to be credited for all the amazing work they are doing.
 
-This is just an humble wrapper designed for the following reason:
+For the same reason, the Wine project (https://www.winehq.org/) and Kron4ek Wine-Builds repository (https://github.com/Kron4ek/Wine-Builds) must be credited and hailed.
+
+This is just an humble launcher designed for the following reason:
 
 - I am lazy and I don't want to tinker with the terminal each time I want to play a game
 
@@ -28,13 +30,15 @@ This is just an humble wrapper designed for the following reason:
 
 - My only goal is to provide the same level of comfort I have to others
 
-- ALL The work done by the OpenWineComponents deserves a statue or more than one
+- ALL The work done by the OpenWineComponents, the Wine project and the credited developers deserves a statue or more than one
 
-- Being an experimental version of ULWGL-Launcher this can be prone to errors
+- This is experimental software
 
 ## ⭐ Features
 
-- Uses libs/ulwgl_runner.py instead of the provided ulwgl-run for a cleaner approach
+- Supports both Proton (through ULWGL) and standard Wine versions
+
+- Runtimes (Proton and Wine) can be installed and run locally on the very same WINEPREFIX to gain advantage of both the specific compatibility features
 
 - Can run programs as simply as "uwine program.exe" (or "uwine winecfg" for internal tools)
 
@@ -56,6 +60,10 @@ This is just an humble wrapper designed for the following reason:
 
 - Is quite nice
 
+### ULWGL Specific Tweaks
+
+- Rewritten the runner script for a more integrated approach
+
 ## Install
 
 _NOTE: the current release has been tested with 0.1 RC3 release in mind and thus that's the version included in laucher/_
@@ -64,13 +72,27 @@ _NOTE: the current release has been tested with 0.1 RC3 release in mind and thus
 
 - Any Proton version; GE-Proton is highly recommended
 
-#### Getting Proton
+OR/AND
 
-You are advised to either use tools like ProtonUp (and its -QT flavor) or to download the latest release from https://github.com/GloriousEggroll/proton-ge-custom/releases and extract it in a folder that you will use as PROTONPATH
+- Any Wine version; 9 and above are highly recommended
 
 - Python
 
-- Not needed of my machine but: ensure to read launcher/Original_README.md to understand ULWGL Launcher prerequisites
+- Not needed of my machine but: ensure to read launcher/Original_README.md to understand ULWGL Launcher prerequisites if you are gonna use it
+
+#### Getting Proton
+
+- Go to https://github.com/GloriousEggroll/proton-ge-custom/releases and download the latest release for your system
+
+- Extract it in a folder that you will use as PROTONPATH
+
+#### Getting Wine binaries
+
+- Go to https://github.com/Kron4ek/Wine-Builds/releases and download the latest release for your system
+
+- Extract it in a folder that you will use as PROTONPATH
+
+**Using a folder near uwine is advised and handy (for ex: protons for Proton instances and wines for Wine instances)**
 
 ### ⏬ Get UWINE
 
@@ -92,8 +114,13 @@ It is important to understand how UWINE works. The 'uwine' executable has to fil
 
 - PROTONPATH
 
-  - string pointing to your custom Proton installation (see Prerequisites)
+  - string pointing to your custom Proton or Wine installation (see Prerequisites)
   - defaults to [script_dir]/protons
+
+- USE_WINE
+
+  - string being either "True" or "False"
+  - if set to "True", uwine will try to run the program using Wine (using the PROTONPATH as Wine binaries directory)
 
 - WINEPREFIX
 
@@ -186,7 +213,7 @@ This command will show you the following:
 ```bash
 usage: uwine [-h] [-l ENVFILE] [-g GAMEID] [-p PROTONPATH] [-i IDS] [-w WINEPREFIX] [-u ULWGLDIR] [-a ADDITIONALARGS] [-v] [filepath]
 
-ULWGL Launcher Wrapper for human beings
+Proton and Wine Launcher for Human Beings
 
 positional arguments:
   filepath              Path to the file to be launched
