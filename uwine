@@ -16,6 +16,7 @@ import libs.customvars_loader as customvars_loader
 import libs.predirectives_loader as predirectives_loader
 import libs.postdirectives_loader as postdirectives_loader
 import libs.ulwlg_runner as ulwlg_runner
+import libs.wine_runner as wine_runner
 
 # SECTION Constants
 LAUNCHDIR = os.getcwd()
@@ -26,6 +27,7 @@ print("[*] UWINE is installed in " + UWINEDIR)
 # SECTION Default values
 ulwgl_dir = UWINEDIR + "/launcher"
 proton_path = UWINEDIR + "/protons/current"
+use_wine = False
 wine_prefix = UWINEDIR + "/PREFIX"
 ids_json_path = UWINEDIR + "/ids.json"
 ids = {}
@@ -85,6 +87,14 @@ if os.environ["CUSTOMVARS"]:
 else:
     env_defined_customvars = {}
 
+if os.environ["USE_WINE"]:
+    if os.environ["USE_WINE"] == "True":
+        use_wine = True
+    else:
+        use_wine = False
+print("[INFO] [USE_WINE] " + str(use_wine))
+
+
 
 if __name__ == "__main__":
     # SECTION Loading methods
@@ -114,6 +124,7 @@ if __name__ == "__main__":
                 ["ULWGLDIR", ulwgl_dir],
                 ["WINEPREFIX", os.environ["WINEPREFIX"]],
                 ["PROTONPATH", os.environ["PROTONPATH"]],
+                ["USE_WINE", use_wine],
                 ["IDS_JSON", ids_json_path],
                 ["GAMEID", os.environ["GAMEID"]],
                 ["PREDIRECTIVES", predirectives],
@@ -126,5 +137,10 @@ if __name__ == "__main__":
         )
     )
 
-    # Launching with ulwlg_runner
-    ulwlg_runner.ulwlg_run(filepath, ulwgl_dir, os.environ["PROTONPATH"], os.environ["WINEPREFIX"], os.environ["GAMEID"])
+    # Launching with ulwlg_runner or wine depending on the use_wine variable
+    if use_wine:
+        print("[*] Using Wine to launch the game")
+        wine_runner.wine_run(filepath, os.environ["PROTONPATH"])
+    else:
+        print("[*] Using ULWGL to launch the game")
+        ulwlg_runner.ulwlg_run(filepath, ulwgl_dir, os.environ["PROTONPATH"], os.environ["WINEPREFIX"], os.environ["GAMEID"])
