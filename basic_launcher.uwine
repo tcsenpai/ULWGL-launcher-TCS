@@ -1,0 +1,10 @@
+# This file was created by ULWGL
+PROTONPATH="/home/[youruser]/UWINE/protons/[current]"
+USE_WINE="False"
+WINEPREFIX="/home/[youruser]/UWINE/PREFIX"
+GAMEID="0"
+ULWLGDIR="/home/[youruser]/UWINE/launcher"
+PREDIRECTIVES=""
+FILEPATH="/path/to/your/file.exe"
+POSTDIRECTIVES=""
+CUSTOMVARS="{'DXVK_ASYNC': '1'}"
